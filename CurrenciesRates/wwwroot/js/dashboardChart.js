@@ -1,18 +1,19 @@
 ﻿
-const api_url = 'https://api.nbp.pl/api/exchangerates/rates/a/EUR/2020-01-01/2020-02-01/?format=json';
+
 const xLabels = [];
 const yRates = [];
-chartIt();
+const label = 'kurs ' + pro.currentRate.currency;
+chartIt(pro.rangeCurrencyRate);
 
-async function chartIt() {
-    await getData();
+async function chartIt(pro) {
+    await getData(pro);
     const ctx = document.getElementById('chart').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: xLabels,
             datasets: [{
-                label: 'Kurs Euro',
+                label: label,
                 data: yRates,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)'
@@ -27,14 +28,40 @@ async function chartIt() {
     });
 }
 
-async function getData() {
+async function getData(data) {
 
-    const response = await fetch(api_url)
-    const data = await response.json();
-    data.rates.forEach(x => {
+    data.forEach(x => {
         yRates.push(x.mid);
         xLabels.push(x.effectiveDate.slice(5, x.lenght).replace('-','.'));
     });
     console.log(data);
 }
+
+//document.getElementById('currentMonth').addEventListener('click', function () {
+//    $.ajax({
+//        type: "POST",
+//        url: ''
+//        contentType: "application/json; charset=utf-8",
+
+//        beforeSend: function (xhr) {
+//            xhr.setRequestHeader("XSRF-TOKEN",
+//                $('input:hidden[name="__RequestVerificationToken"]').val());
+//        },
+
+//        dataType: "json"
+//    }).done(function (data) {
+//        console.log(data.result);
+//    })
+
+//    const response = await fetch(api_url)
+//    const data = await response.json();
+//    data.rates.forEach(x => {
+//        yRates.push(x.mid);
+//        xLabels.push(x.effectiveDate.slice(5, x.lenght).replace('-', '.'));
+//    });
+//    console.log(data);
+
+//    window.myLine.update();
+//});
+
 

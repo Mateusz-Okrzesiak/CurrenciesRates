@@ -1,15 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using CurrenciesRates.Core.CurrencyRate;
+using CurrenciesRates.Core.Models;
 using CurrenciesRates.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CurrenciesRates.Controllers
 {
-    public class CurrencyRate : Controller
+    public class CurrencyRateController : Controller
     {
+
+        private readonly ICurrencyRateService _currencyRateService;
+
+
+        public CurrencyRateController(ICurrencyRateService currencyRateService)
+        {
+            _currencyRateService = currencyRateService;
+        }
         // GET: CurrencyRate
         public ActionResult Index()
         {
@@ -17,9 +32,15 @@ namespace CurrenciesRates.Controllers
         }
 
         // GET: CurrencyRate/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string currencyCode)
         {
-            return View();
+            DateTime date = DateTime.Now;
+            CurrencyViewModel cvm = new CurrencyViewModel();
+
+            cvm.CurrentRate = this._currencyRateService.GetCurrentRateByCode(currencyCode);
+            cvm.RangeCurrencyRate = this._currencyRateService.GetCurrencyFromRange(new DateTime(date.Year, date.Month, 1), date, currencyCode);
+
+            return View(cvm);
         }
 
         // GET: CurrencyRate/Create
@@ -35,7 +56,6 @@ namespace CurrenciesRates.Controllers
         {
             try
             {
-                Repository.AddResponse();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -88,10 +108,10 @@ namespace CurrenciesRates.Controllers
 
         public ActionResult CurrenciesRatesList()
         {
-            if(!Repository.Currencies.Any())
-                Repository.AddResponse();
 
-            return View(Repository.Currencies);
+            var rates = this._currencyRateService.GetCurrenciesRates();
+          
+            return View(rates);
         }
     }
 }
