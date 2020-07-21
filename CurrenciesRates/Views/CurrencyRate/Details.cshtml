@@ -1,8 +1,15 @@
 ﻿@model CurrenciesRates.Models.Currency
 
-@{
-    ViewData["Title"] = "Details";
-}
+@{ Layout = "_Layout"; }
+
+
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
 
 <h1>Details</h1>
 
@@ -10,22 +17,22 @@
     <h4>Currency</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CurrencySymbol)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CurrencySymbol)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AVGRate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AVGRate)
         </dd>
     </dl>
@@ -34,7 +41,23 @@
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
 </div>
-<div>
-
-
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+<div style="width:50%;">
+    <canvas id="chart"></canvas>
 </div>
+<br>
+<br>
+
+<button id="CurrentMonth">CurrentMonth</button>
+
+@section Scripts {
+    <script src="~/lib/Chart.js/Chart.js"></script>
+    <script src="~/js/dashboardChart.js"></script>
+}
+
