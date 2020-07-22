@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using ClosedXML.Excel;
 using CurrenciesRates.Core.CurrencyRate;
 using CurrenciesRates.Core.Models;
 using CurrenciesRates.Models;
@@ -43,75 +44,51 @@ namespace CurrenciesRates.Controllers
             return View(cvm);
         }
 
-        // GET: CurrencyRate/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CurrencyRate/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CurrencyRate/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: CurrencyRate/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: CurrencyRate/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CurrencyRate/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         public ActionResult CurrenciesRatesList()
         {
 
             var rates = this._currencyRateService.GetCurrenciesRates();
           
             return View(rates);
+        }
+
+        public IEnumerable<double> MonthsAVG(string currencyCode)
+        {
+            var monthsAvg = this._currencyRateService.GetMonthsAVGCurrency(currencyCode);
+            return monthsAvg;
+        }
+
+        public async Task<JsonResult> GenerateExcelFile(string[] labels, string[] rate)
+        {
+
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "KursWalut.xlsx";
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    IXLWorksheet worksheet =
+                    workbook.Worksheets.Add($"Kursy walut ");
+
+                    for (int i = 0; i < labels.Length; i++)
+                    {
+                        worksheet.Cell(1, i + 1).Value = labels[i];
+                        worksheet.Cell(2, i + 1).Value = rate[i];
+                    }
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        stream.Position = 0;
+                        var content = stream.ToArray();
+                        return File(content, contentType, fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

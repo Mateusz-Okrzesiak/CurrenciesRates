@@ -54,7 +54,8 @@
 <br>
 <br>
 <a class="btn btn-primary" asp-action="Details" asp-route-currencyCode="@Model.CurrentRate.Code">CurrentMonth</a> |
-<a class="btn btn-primary" asp-action="Details" onclick="monthsAVG()">AVG per month</a>
+<a class="btn btn-primary" onclick="monthsAVG('@Model.CurrentRate.Code')">AVG per month</a>
+<a class="btn btn-primary" onclick="generateExcel()">Excel</a>
 
 @section Scripts {
     <script type="text/javascript">

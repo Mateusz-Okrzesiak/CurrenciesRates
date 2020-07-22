@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CurrenciesRates.Core.Models;
 using CurrenciesRates.Models;
@@ -12,6 +13,7 @@ namespace CurrenciesRates.Core.CurrencyRate
         Rate GetCurrentRateByCode(string code);
         IEnumerable<Rate> GetCurrenciesRates();
         IEnumerable<Rate> GetCurrencyFromRange(DateTime startDate, DateTime endDate, string currencyCode);
+        IEnumerable<double> GetMonthsAVGCurrency(string currencyCode);
     }
 
     public class CurrencyRateService : ICurrencyRateService
@@ -59,9 +61,16 @@ namespace CurrenciesRates.Core.CurrencyRate
             {
                 var root = JObject.Parse(result);
                 rates = root["rates"].ToObject<IEnumerable<Rate>>();
-                //rates = root[0]["rates"].ToObject<IEnumerable<Rate>>();
             }
             return rates;
+        }
+
+        public IEnumerable<double> GetMonthsAVGCurrency(string currencyCode)
+        {
+            var result = GetCurrencyFromRange(new DateTime(DateTime.Now.Year, 1, 1), DateTime.Now, currencyCode).GroupBy(x => x.EffectiveDate.Month)
+                                             .Select(group => new { AVG = group.Sum(x => x.Mid) / group.Count() }).Select(a => a.AVG);
+
+            return result;     
         }
     }
 } 

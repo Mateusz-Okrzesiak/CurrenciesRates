@@ -10,6 +10,6 @@ namespace CurrenciesRates.Core.Models
         public string Currency { get; set; }
         public string Code { get; set; }
         public double Mid { get; set; }
-        public string EffectiveDate { get; set; }
+        public DateTime EffectiveDate { get; set; }
     }
 }
