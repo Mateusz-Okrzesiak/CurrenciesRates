@@ -1,33 +1,19 @@
-﻿@model IEnumerable<CurrenciesRates.Models.Currency>
+﻿@model IEnumerable<CurrenciesRates.Core.Models.Rate>
 
-@{
-    ViewData["Title"] = "CurrenciesRatesList";
-}
 
-    <form class="p-a-1" asp-action="Create" method="post">
-        @Html.AntiForgeryToken()
-        <div class="text-center">
-            <button class="btn btn-primary" type="submit">
-                Dodaj Waluty
-            </button>
-        </div>
-    </form>
-<h1>CurrenciesRatesList</h1>
+<h1>Lista kursów walut</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Currency)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CurrencySymbol)
+                @Html.DisplayNameFor(model => model.Code)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AVGRate)
+                @Html.DisplayNameFor(model => model.Mid)
             </th>
             <th></th>
         </tr>
@@ -37,18 +23,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => item.Currency)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CurrencySymbol)
+                    @Html.DisplayFor(modelItem => item.Code)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AVGRate)
+                    @Html.DisplayFor(modelItem => item.Mid)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Szczegóły", "Details", new { currencyCode = item.Code  })
                 </td>
             </tr>
         }

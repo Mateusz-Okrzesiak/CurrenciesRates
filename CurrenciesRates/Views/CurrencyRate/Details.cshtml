@@ -1,40 +1,64 @@
-﻿@model CurrenciesRates.Models.Currency
+﻿@model CurrenciesRates.Core.Models.CurrencyViewModel
 
-@{
-    ViewData["Title"] = "Details";
-}
+@{ Layout = "_Layout"; }
 
-<h1>Details</h1>
+
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+
+<h1>Szczegóły</h1>
 
 <div>
-    <h4>Currency</h4>
+    <h4>Kurs Waluty</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CurrentRate.Currency)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CurrentRate.Currency)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CurrencySymbol)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CurrentRate.Code)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CurrencySymbol)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CurrentRate.Code)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AVGRate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CurrentRate.Mid)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AVGRate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CurrentRate.Mid)
         </dd>
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+<div style="width:100%;">
+    <canvas id="chart"></canvas>
 </div>
-<div>
+<br>
+<br>
+<a class="btn btn-primary" asp-action="Details" asp-route-currencyCode="@Model.CurrentRate.Code">Bieżący miesiąc</a> |
+<a class="btn btn-primary details-button" onclick="monthsAVG('@Model.CurrentRate.Code')">Średni miesięczny kurs</a> |
+<a class="btn btn-primary details-button" onclick="generateExcel()">Excel</a>
 
+@section Scripts {
+    <script type="text/javascript">
+        var model = @Html.Raw(Json.Serialize(Model));
 
-</div>
+    </script>
+    <script src="~/lib/Chart.js/Chart.js"></script>
+    <script src="~/js/dashboardChart.js"></script>
+}
+
