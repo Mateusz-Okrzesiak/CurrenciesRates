@@ -11,10 +11,10 @@
     }
 </style>
 
-<h1>Details</h1>
+<h1>Szczegóły</h1>
 
 <div>
-    <h4>Currency</h4>
+    <h4>Kurs Waluty</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -37,10 +37,6 @@
         </dd>
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
 <style>
     canvas {
         -moz-user-select: none;
@@ -53,13 +49,13 @@
 </div>
 <br>
 <br>
-<a class="btn btn-primary" asp-action="Details" asp-route-currencyCode="@Model.CurrentRate.Code">CurrentMonth</a> |
-<a class="btn btn-primary" onclick="monthsAVG('@Model.CurrentRate.Code')">AVG per month</a>
-<a class="btn btn-primary" onclick="generateExcel()">Excel</a>
+<a class="btn btn-primary" asp-action="Details" asp-route-currencyCode="@Model.CurrentRate.Code">Bieżący miesiąc</a> |
+<a class="btn btn-primary details-button" onclick="monthsAVG('@Model.CurrentRate.Code')">Średni miesięczny kurs</a> |
+<a class="btn btn-primary details-button" onclick="generateExcel()">Excel</a>
 
 @section Scripts {
     <script type="text/javascript">
-        var pro = @Html.Raw(Json.Serialize(Model));
+        var model = @Html.Raw(Json.Serialize(Model));
 
     </script>
     <script src="~/lib/Chart.js/Chart.js"></script>

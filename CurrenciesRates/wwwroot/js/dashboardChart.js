@@ -1,11 +1,11 @@
 ﻿
-
 var xLabels = [];
 var yRates = [];
 const months = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
-var label = 'kurs ' + pro.currentRate.currency;
+var label = 'kurs ' + model.currentRate.currency;
 var myChart;
-chartIt(pro.rangeCurrencyRate);
+
+chartIt(model.rangeCurrencyRate);
 
 async function chartIt(pro) {
     await getData(pro);
@@ -44,10 +44,6 @@ function monthsAVG(currencyCode) {
             url: 'MonthsAVG',
         contentType: "application/json; charset=utf-8",
             data: { currencyCode: currencyCode },
-        //beforeSend: function (xhr) {
-        //    xhr.setRequestHeader("XSRF-TOKEN",
-        //        $('input:hidden[name="__RequestVerificationToken"]').val());
-        //},
         dataType: "json"
         }).done(function (data) {
             myChart.data.datasets[0].data = [];
@@ -61,23 +57,37 @@ function monthsAVG(currencyCode) {
 }
 
 function generateExcel() {
+        
+    //xhttp = new XMLHttpRequest();
+    //xhttp.onreadystatechange = function () {
+    //    var a;
+    //    if (xhttp.readyState === 4 && xhttp.status === 200) {
+    //        a = document.createElement('a');
+    //        a.href = window.URL.createObjectURL(xhttp.response);
+    //        a.download = filename;
+    //        a.style.display = 'none';
+    //        document.body.appendChild(a);
+    //        a.click();
+    //    }
+    //};
+    //xhttp.open("POST", 'GenerateExcelFile');
+    //xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    //xhttp.responseType = 'blob';
+    //xhttp.send(
+    //    'labels+'+myChart.data.labels+'&rate='+myChart.data.datasets[0].data);
+
+
     $.ajax({
         type: "Get",
         url: 'GenerateExcelFile',
         contentType: "application/json; charset=utf-8",
         data: { labels: myChart.data.labels, rate: myChart.data.datasets[0].data },
         traditional: true,
-        //beforeSend: function (xhr) {
-        //    xhr.setRequestHeader("XSRF-TOKEN",
-        //        $('input:hidden[name="__RequestVerificationToken"]').val());
-        //},
         success: function (Rdata) {
-            debugger;
-            var bytes = new Uint8Array(Rdata.FileContents);
-            var blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            var blob = new Blob([Rdata], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = "myFileName.xlsx";
+            link.download = "Kurs_walut.xlsx";
             link.click();
         },
         error: function (msg) {

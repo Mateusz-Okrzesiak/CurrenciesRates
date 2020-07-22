@@ -1,23 +1,9 @@
 ﻿@model IEnumerable<CurrenciesRates.Core.Models.Rate>
 
-@{
-    ViewData["Title"] = "CurrenciesRatesList";
-}
 
-    <form class="p-a-1" asp-action="Create" method="post">
-        @Html.AntiForgeryToken()
-        <div class="text-center">
-            <button class="btn btn-primary" type="submit">
-                Dodaj Waluty
-            </button>
-        </div>
-    </form>
-<h1>CurrenciesRatesList</h1>
+<h1>Lista kursów walut</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -46,7 +32,7 @@
                     @Html.DisplayFor(modelItem => item.Mid)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new { currencyCode = item.Code  })
+                    @Html.ActionLink("Szczegóły", "Details", new { currencyCode = item.Code  })
                 </td>
             </tr>
         }

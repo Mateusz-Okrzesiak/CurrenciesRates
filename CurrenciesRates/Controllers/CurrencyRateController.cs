@@ -21,7 +21,6 @@ namespace CurrenciesRates.Controllers
 
         private readonly ICurrencyRateService _currencyRateService;
 
-
         public CurrencyRateController(ICurrencyRateService currencyRateService)
         {
             _currencyRateService = currencyRateService;
@@ -46,7 +45,6 @@ namespace CurrenciesRates.Controllers
 
         public ActionResult CurrenciesRatesList()
         {
-
             var rates = this._currencyRateService.GetCurrenciesRates();
           
             return View(rates);
@@ -57,10 +55,8 @@ namespace CurrenciesRates.Controllers
             var monthsAvg = this._currencyRateService.GetMonthsAVGCurrency(currencyCode);
             return monthsAvg;
         }
-
-        public async Task<JsonResult> GenerateExcelFile(string[] labels, string[] rate)
+        public  IActionResult GenerateExcelFile(string[] labels, string[] rate)
         {
-
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "KursWalut.xlsx";
             try
@@ -68,7 +64,7 @@ namespace CurrenciesRates.Controllers
                 using (var workbook = new XLWorkbook())
                 {
                     IXLWorksheet worksheet =
-                    workbook.Worksheets.Add($"Kursy walut ");
+                    workbook.Worksheets.Add($"Kursy walut");
 
                     for (int i = 0; i < labels.Length; i++)
                     {
@@ -79,6 +75,7 @@ namespace CurrenciesRates.Controllers
                     using (var stream = new MemoryStream())
                     {
                         workbook.SaveAs(stream);
+
                         stream.Position = 0;
                         var content = stream.ToArray();
                         return File(content, contentType, fileName);
